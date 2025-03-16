@@ -15,42 +15,29 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      # 1. Check out your repository
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
 
-      # 2. Replace the placeholder with your actual function key
-      #    (Only if you've defined a placeholder in environment.prod.ts, e.g. <FUNCTION_KEY_PLACEHOLDER>)
       - name: Replace Function Key placeholder
-        # Only run this step if you have an AZURE_FUNCTION_KEY secret defined
-        if: ${{ secrets.AZURE_FUNCTION_KEY != '' }}
+        if: ${{ secrets.AZURE_FUNCTION_KEY && secrets.AZURE_FUNCTION_KEY != '' }}
         run: |
           sed -i 's/<FUNCTION_KEY_PLACEHOLDER>/${{ secrets.AZURE_FUNCTION_KEY }}/g' src/environments/environment.prod.ts
 
-      # 3. Build and Deploy using Azure Static Web Apps Action
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          # This is your unique token that Azure created for this Static Web App
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_<GENERATED_HOSTNAME> }}
-
+          # Replace the secret name below with your actual generated secret name.
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_FLOWER_03A3B6A0 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
+          # Set these paths based on your repository structure.
+          app_location: "/"         # App source code path (root if your Angular app is at the repo root)
+          api_location: ""          # Leave blank if no API code in the repo
+          output_location: "dist/AngularPro1"  # Adjust to match your angular.json outputPath
 
-          # If your Angular code is in the repo root, leave this as "/"
-          app_location: "/"
-
-          # If you have no Azure Functions in this repo, leave this blank
-          api_location: ""
-
-          # The output folder where Angular places your build
-          # e.g. "dist/angular-pro1" or "dist/AngularPro1" depending on your angular.json
-          output_location: "dist/AngularPro1"
-
-  # Job that closes the environment for a closed PR
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
@@ -60,5 +47,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_<GENERATED_HOSTNAME> }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_FLOWER_03A3B6A0 }}
           action: "close"
