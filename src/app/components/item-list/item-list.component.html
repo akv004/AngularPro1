@@ -1,0 +1,13 @@
+<div>
+  <h2>Item List</h2>
+  <ul>
+    <li *ngFor="let item of items; let i = index">
+      <a [routerLink]="[{ outlets: { details: ['details', i + 1] } }]">
+        {{ item }}
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Secondary outlet for item details -->
+<router-outlet name="details"></router-outlet>
