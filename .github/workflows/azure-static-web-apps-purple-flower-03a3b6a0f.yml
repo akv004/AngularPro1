@@ -24,7 +24,7 @@ jobs:
         run: |
           if [ -n "${{ secrets.AZURE_FUNCTION_KEY }}" ]; then
             echo "Function key found. Replacing placeholder..."
-            sed -i 's/<FUNCTION_KEY_PLACEHOLDER>/${{ secrets.AZURE_FUNCTION_KEY }}/g' src/environments/environment.prod.ts
+            sed -i 's/<FUNCTION_KEY_PLACEHOLDER>/'"${{ secrets.AZURE_FUNCTION_KEY }}"'/g' src/environments/environment.prod.ts
           else
             echo "No function key found. Skipping placeholder replacement."
           fi
@@ -36,7 +36,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_FLOWER_03A3B6A0 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"         # App source code path (root if your Angular app is at the repo root)
+          app_location: "/"         # App source code path (if your Angular app is at the repo root)
           api_location: ""          # Leave blank if no API code in the repo
           output_location: "dist/AngularPro1"  # Adjust to match your angular.json outputPath
           skip_deploy_on_missing_secrets: true
@@ -50,5 +50,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_FUNCTION_KEY }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_FLOWER_03A3B6A0 }}
           action: "close"
