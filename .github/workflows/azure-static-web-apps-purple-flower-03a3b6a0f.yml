@@ -39,7 +39,7 @@ jobs:
           app_location: "/"         # App source code path (if your Angular app is at the repo root)
           api_location: ""          # Leave blank if no API code in the repo
           output_location: "dist/AngularPro1"  # Adjust to match your angular.json outputPath
-          skip_deploy_on_missing_secrets: true
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
