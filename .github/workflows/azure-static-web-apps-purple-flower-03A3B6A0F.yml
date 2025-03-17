@@ -24,11 +24,11 @@ jobs:
         run: |
           if [ -n "${{ secrets.AZURE_FUNCTION_KEY }}" ]; then
             echo "Function key found. Replacing placeholder..."
-            echo "Function key: ${{ secrets.AZURE_FUNCTION_KEY }}" # Temporary logging for debugging
-            sed -i 's/<FUNCTION_KEY_PLACEHOLDER>/'"${{secrets.AZURE_FUNCTION_KEY}}"'/g' src/environments/environment.prod.ts
+            sed -i "s/<FUNCTION_KEY_PLACEHOLDER>/${{ secrets.AZURE_FUNCTION_KEY }}/g" src/environments/environment.prod.ts
           else
             echo "No function key found. Skipping placeholder replacement."
           fi
+
 
       - name: Build And Deploy
         id: builddeploy
